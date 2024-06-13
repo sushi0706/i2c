@@ -3,25 +3,25 @@ module i2c_slave(
 	inout sda			//serial data line
 	);			
 	
-	parameter READ_ADDR=2'b00, SEND_ACK_1=2'b01, DATA_TRANS=2'b10, SEND_ACK_2=2'b11;		//FSM states	
+	parameter READ_ADDR=2'b00, SEND_ACK_1=2'b01, DATA_TRANS=2'b10, SEND_ACK_2=2'b11;	//FSM states	
 	
 	localparam SLAVE_ADDRESS=7'b1010111;	//address of slave
 	
 	//internal registers
-	reg [1:0] state=READ_ADDR;				//current state
-	reg [6:0] addr;							//received address
-	reg rw;										//high for read, low for write
-	reg [7:0] data_in=0;						//received data
+	reg [1:0] state=READ_ADDR;		//current state
+	reg [6:0] addr;				//received address
+	reg rw;					//high for read, low for write
+	reg [7:0] data_in=0;			//received data
 	reg [7:0] data_out=8'b11001101;		//stored data
-	reg sda_out=0;								//data to put on sda
-	reg sda_enable=0;							//enable for sda
-	reg sda_enable_2=1;						//enable for sda
-	reg [2:0] count=7;						//general counter
-	reg start=0;								//signal to start
-	reg stop=1;									//signal to reset
+	reg sda_out=0;				//data to put on sda
+	reg sda_enable=0;			//enable for sda
+	reg sda_enable_2=1;			//enable for sda
+	reg [2:0] count=7;			//general counter
+	reg start=0;				//signal to start
+	reg stop=1;				//signal to reset
 	
 	
-	//check start and stop condition
+	//check start and stop conditions
 	always@(sda) begin
 		//start condition
 		if(sda==0 && scl==1)begin
