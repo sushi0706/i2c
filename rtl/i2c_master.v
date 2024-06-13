@@ -1,28 +1,28 @@
 module i2c_master(
-	input clk,						//main 100MHz clock
+	input clk,					//main 100MHz clock
 	input areset,					//asynchronous reset
 	input [6:0] addr,				//address of slave device
-	input [7:0] data_in,			//data to write
+	input [7:0] data_in,				//data to write
 	input enable,					//enable for i2c master
-	input rw,						//high for read, low for write
-	output reg [7:0] data_out,		//output data after read
+	input rw,					//high for read, low for write
+	output reg [7:0] data_out,			//output data after read
 	output busy,					//high when busy
-	output scl,						//serial clock line (actual i2c clock)
-	inout sda						//serial data line (actual i2c data)
+	output scl,					//serial clock line (actual i2c clock)
+	inout sda					//serial data line (actual i2c data)
 	);							
 						
-	parameter IDLE=3'b000, START=3'b001, ADDR=3'b010, READ_ACK_1=3'b011, DATA_TRANS=3'b100, WRITE_ACK=3'b101, READ_ACK_2=3'b110, STOP=3'b111;	//FSM state
+	parameter IDLE=3'b000, START=3'b001, ADDR=3'b010, READ_ACK_1=3'b011, DATA_TRANS=3'b100, WRITE_ACK=3'b101, READ_ACK_2=3'b110, STOP=3'b111;	//FSM states
 	
 	//internal registers
 	reg [2:0] state=IDLE;		//current state
-	reg [2:0] count=0;			//general counter
+	reg [2:0] count=0;		//general counter
 	reg [7:0] count_2=0;		//counter to generate i2c clock
-	reg i2c_clk=0;				//400KHz i2c clock
-	reg scl_en_clk=0;			//800KHz clock
+	reg i2c_clk=0;			//400KHz i2c clock
+	reg scl_en_clk=0;		//800KHz clock
 	reg [7:0] count_3=0;		//counter to generate scl_en_clk
-	reg scl_enable=0;			//enable for scl
-	reg sda_enable=0;			//enable for sda
-	reg sda_out;				//data to put on sda
+	reg scl_enable=0;		//enable for scl
+	reg sda_enable=0;		//enable for sda
+	reg sda_out;			//data to put on sda
 	reg [7:0] saved_addr;		//input address
 	reg [7:0] saved_data;		//input data
 
