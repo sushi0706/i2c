@@ -16,20 +16,22 @@ module i2c_tb;
 	wire busy;
 	
 	//instantiate the master module
-	i2c_master master(.clk(clk),
-							.areset(areset),
-							.addr(addr),
-							.data_in(data_in),
-							.rw(rw),
-							.enable(enable),
-							.scl(scl),
-							.sda(sda),
-							.data_out(data_out),
-							.busy(busy));
+	i2c_master master(
+		.clk(clk),
+		.areset(areset),
+		.addr(addr),
+		.data_in(data_in),
+		.rw(rw),
+		.enable(enable),
+		.scl(scl),
+		.sda(sda),
+		.data_out(data_out),
+		.busy(busy));
 		
 	//instantiate the slave module
-	i2c_slave slave(.sda(sda),
-						 .scl(scl));
+	i2c_slave slave(
+		.sda(sda),
+		.scl(scl));
 	
 	//generate the clk
 	always begin
